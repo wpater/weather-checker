@@ -21,7 +21,7 @@ public class WeatherRetrieverTest {
     @Test
     public void retrieveWeatherForLocation() {
         String location = "Cracow";
-        
+
         Weather weather = retriever.retrieve(location);
 
         assertNotNull(weather.getLocation());
