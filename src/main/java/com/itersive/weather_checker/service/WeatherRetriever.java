@@ -17,10 +17,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class WeatherRetriever {
 
     private static final Logger logger = LoggerFactory.getLogger(WeatherRetriever.class);
-    private static String QUERY = "q";
-    private static String APIID = "APPID";
-    private static String UNITS = "units";
-    private static String CELCIUS = "metric";
+
+    private final String query = "q";
+    private final String appId = "appId";
+    private final String units = "units";
+    private final String celcius = "metric";
 
     @Value("${com.itersive.weather_checker.openweathermap.api.url}")
     private String url;
@@ -42,9 +43,9 @@ public class WeatherRetriever {
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam(QUERY, location)
-                .queryParam(APIID, apiId)
-                .queryParam(UNITS, CELCIUS);
+                .queryParam(query, location)
+                .queryParam(appId, apiId)
+                .queryParam(units, celcius);
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
