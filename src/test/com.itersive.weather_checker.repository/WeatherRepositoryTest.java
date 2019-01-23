@@ -27,7 +27,7 @@ public class WeatherRepositoryTest {
 
     @Before
     public void init() {
-        entity = repository.save(new Weather("Coordinates", 0.0));
+        entity = repository.save(new Weather("Location", 0.0));
     }
 
     @After
