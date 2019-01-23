@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -69,5 +70,21 @@ public class WeatherRetrieverTest {
         Optional<Weather> optionalWeather = retriever.retrieve(location);
 
         assertFalse(optionalWeather.isPresent());
+    }
+
+    @Test
+    public void retrieveWeatherFromDB() {
+        String location = "Krakow";
+
+        Optional<Weather> optionalWeather = retriever.retrieve(location);
+
+        assertTrue(optionalWeather.isPresent());
+
+        Weather weather = optionalWeather.get();
+
+        List<Weather> list = retriever.retrieveStoredWeather(location);
+
+        assertEquals(1, list.size());
+        assertEquals(list.get(0).getLocation().toLowerCase(), weather.getLocation().toLowerCase());
     }
 }

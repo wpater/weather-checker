@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,6 +84,11 @@ public class WeatherRetriever {
         weather.ifPresent(this::saveWeather);
 
         return weather;
+    }
+
+    public List<Weather> retrieveStoredWeather(String location) {
+        logger.debug("Retrieving stored weather from database for: {}", location);
+        return repository.findByLocation(location);
     }
 
     private Optional<Weather> processRequest(UriComponentsBuilder builder) {

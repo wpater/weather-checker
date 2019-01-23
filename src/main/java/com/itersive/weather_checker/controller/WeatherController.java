@@ -1,7 +1,7 @@
 package com.itersive.weather_checker.controller;
 
-import com.itersive.weather_checker.model.Location;
 import com.itersive.weather_checker.model.Weather;
+import com.itersive.weather_checker.repository.WeatherRepository;
 import com.itersive.weather_checker.service.LocationDetector;
 import com.itersive.weather_checker.service.WeatherRetriever;
 import org.slf4j.Logger;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -49,6 +50,12 @@ public class WeatherController {
         });
 
         return results;
+    }
+
+    @GetMapping("prev")
+    public List<Weather> getWeatherForLocation(@RequestParam String location) {
+        logger.debug("Getting old weather for: {}", location);
+        return retriever.retrieveStoredWeather(location);
     }
 
     private void autodetect() {
