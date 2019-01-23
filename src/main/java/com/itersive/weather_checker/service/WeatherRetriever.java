@@ -18,6 +18,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Optional;
 
 @Service
@@ -48,10 +50,17 @@ public class WeatherRetriever {
     public Optional<Weather> retrieve(String location) {
         logger.debug("Retrieving weather from API for location: {}", location);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam(query, location)
-                .queryParam(appId, apiId)
-                .queryParam(units, celsius);
+        UriComponentsBuilder builder;
+        try {
+            builder = UriComponentsBuilder.fromHttpUrl(url)
+                    // API does not support %20 as a space - need UTF encoding
+                    .queryParam(query, URLEncoder.encode(location,"UTF-8" ))
+                    .queryParam(appId, apiId)
+                    .queryParam(units, celsius);
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Error with encoding occurred: {}", e.getMessage());
+            return Optional.empty();
+        }
 
         Optional<Weather> weather = processRequest(builder);
 
