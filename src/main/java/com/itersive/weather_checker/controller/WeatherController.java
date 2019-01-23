@@ -1,12 +1,13 @@
 package com.itersive.weather_checker.controller;
 
 import com.itersive.weather_checker.model.Weather;
-import com.itersive.weather_checker.repository.WeatherRepository;
 import com.itersive.weather_checker.service.LocationDetector;
 import com.itersive.weather_checker.service.WeatherRetriever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("weather")
+@EnableScheduling
 public class WeatherController {
 
     private static final Logger logger = LoggerFactory.getLogger(WeatherController.class);
@@ -40,6 +42,8 @@ public class WeatherController {
     }
 
     @GetMapping
+    // Data in openweathermap is updated every 10min
+    @Scheduled(cron = "0 0/10 * * * ?")
     public List<Weather> getWeather() {
         logger.debug("Checking weather for: {}", locations);
 
