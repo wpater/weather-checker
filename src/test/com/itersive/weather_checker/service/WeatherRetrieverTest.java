@@ -1,6 +1,8 @@
 package com.itersive.weather_checker.service;
 
 import com.itersive.weather_checker.App;
+import com.itersive.weather_checker.model.Coordinates;
+import com.itersive.weather_checker.model.Location;
 import com.itersive.weather_checker.model.Weather;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,13 +21,25 @@ public class WeatherRetrieverTest {
     private WeatherRetriever retriever;
 
     @Test
-    public void retrieveWeatherForLocation() {
-        String location = "Cracow";
+    public void retrieveWeatherByString() {
+        String location = "krakow";
 
         Weather weather = retriever.retrieve(location);
 
         assertNotNull(weather.getLocation());
-        assertEquals(location, weather.getLocation());
+        assertEquals(location.toLowerCase(), weather.getLocation().toLowerCase());
+        assertNotNull(weather.getTemp());
+    }
+
+    @Test
+    public void retrieveWeatherByLocation() {
+        Coordinates coords = new Coordinates(50.0756, 19.8967);
+        Location location = new Location(coords, 0.0);
+
+        Weather weather = retriever.retrieve(location);
+
+        assertNotNull(weather.getLocation());
+        assertEquals("krakow", weather.getLocation().toLowerCase());
         assertNotNull(weather.getTemp());
     }
 }

@@ -1,5 +1,6 @@
 package com.itersive.weather_checker.service;
 
+import com.itersive.weather_checker.model.Location;
 import com.itersive.weather_checker.model.Weather;
 import com.itersive.weather_checker.repository.WeatherRepository;
 import org.slf4j.Logger;
@@ -21,7 +22,9 @@ public class WeatherRetriever {
     private final String query = "q";
     private final String appId = "appId";
     private final String units = "units";
-    private final String celcius = "metric";
+    private final String celsius = "metric";
+    private final String lon = "lon";
+    private final String lat = "lat";
 
     @Value("${com.itersive.weather_checker.openweathermap.api.url}")
     private String url;
@@ -39,24 +42,44 @@ public class WeatherRetriever {
     public Weather retrieve(String location) {
         logger.debug("Retrieving weather from API for location: {}", location);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam(query, location)
                 .queryParam(appId, apiId)
-                .queryParam(units, celcius);
+                .queryParam(units, celsius);
+
+        Weather weather = processRequest(builder);
+
+        saveWeather(weather);
+
+        return weather;
+    }
+
+    public Weather retrieve(Location location) {
+        logger.debug("Retrieving weather from API for location: {}", location);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam(lat, location.getCoordinates().getLat())
+                .queryParam(lon, location.getCoordinates().getLng())
+                .queryParam(appId, apiId)
+                .queryParam(units, celsius);
+
+        Weather weather = processRequest(builder);
+
+        saveWeather(weather);
+
+        return weather;
+    }
+
+    private Weather processRequest(UriComponentsBuilder builder) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         HttpEntity<Weather> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
                 entity, Weather.class);
 
-        Weather weather = response.getBody();
-
-        saveWeather(weather);
-
-        return weather;
+        return response.getBody();
     }
 
     private void saveWeather(Weather weather) {
