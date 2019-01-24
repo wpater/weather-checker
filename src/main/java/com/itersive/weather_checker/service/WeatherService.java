@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,6 @@ public class WeatherService {
     public WeatherService(LocationDetector detector, WeatherRetriever retriever) {
         this.detector = detector;
         this.retriever = retriever;
-        autodetect();
     }
 
     // Data in openweathermap is updated every 10min
@@ -78,10 +78,13 @@ public class WeatherService {
         return detection;
     }
 
+    @PostConstruct
     private void autodetect() {
+        logger.debug("Autodetection: {}", detection);
         if (auto.equals(detection)) {
             Optional<Weather> o = retriever.retrieve(detector.detect());
             o.ifPresent(item -> locations.add(item.getLocation()));
+            logger.debug("Autodetection done, locations: {}", locations);
         }
     }
 }
