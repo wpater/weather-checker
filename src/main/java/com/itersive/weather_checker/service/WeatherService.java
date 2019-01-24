@@ -9,10 +9,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -40,22 +40,19 @@ public class WeatherService {
     public List<Weather> getWeather() {
         logger.debug("Checking weather for: {}", locations);
 
-        List<Weather> results = new ArrayList<>();
-        locations.forEach(location -> {
-            Optional<Weather> o = retriever.retrieve(location);
-            o.ifPresent(results::add);
-        });
-
-        return results;
+        return locations.stream()
+                .map(location -> retriever.retrieve(location))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     public List<List<Weather>> getPrevWeather() {
         logger.debug("Getting old weather for: {}", locations);
 
-        List<List<Weather>> results = new ArrayList<>();
-        locations.forEach(location -> results.add(retriever.retrieveStoredWeather(location)));
-
-        return results;
+        return locations.stream()
+                .map(location -> retriever.retrieveStoredWeather(location))
+                .collect(Collectors.toList());
     }
 
     public void addLocation(String location) {
