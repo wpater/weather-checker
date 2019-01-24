@@ -88,7 +88,7 @@ public class WeatherRetrieverTest {
 
         List<Weather> list = retriever.retrieveStoredWeather(location);
 
-        assertEquals(1, list.size());
+        assertTrue(1 <= list.size());
         assertEquals(list.get(0).getLocation().toLowerCase(), weather.getLocation().toLowerCase());
     }
 }
