@@ -30,7 +30,7 @@ public class LocationDetector {
         this.restTemplate = new RestTemplate();
     }
 
-    public Location detect() {
+    Location detect() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 

@@ -3,14 +3,12 @@ package com.itersive.weather_checker.service;
 import com.itersive.weather_checker.model.Location;
 import com.itersive.weather_checker.model.Weather;
 import com.itersive.weather_checker.repository.WeatherRepository;
-import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +16,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,13 +46,20 @@ public class WeatherRetriever {
         restTemplate = new RestTemplate();
     }
 
-    public Optional<Weather> retrieve(String location) {
+    Optional<Weather> retrieve(String location) {
         logger.debug("Retrieving weather from API for location: {}", location);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam(query, location)
-                .queryParam(appId, apiId)
-                .queryParam(units, celsius);
+        UriComponentsBuilder builder;
+        try {
+            builder = UriComponentsBuilder.fromHttpUrl(url)
+                    // API does not support %20 as a space - need UTF encoding
+                    .queryParam(query, URLEncoder.encode(location,"UTF-8" ))
+                    .queryParam(appId, apiId)
+                    .queryParam(units, celsius);
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Error with encoding occurred: {}", e.getMessage());
+            return Optional.empty();
+        }
 
         Optional<Weather> weather = processRequest(builder);
 
@@ -60,7 +68,7 @@ public class WeatherRetriever {
         return weather;
     }
 
-    public Optional<Weather> retrieve(Location location) {
+    Optional<Weather> retrieve(Location location) {
         logger.debug("Retrieving weather from API for location: {}", location);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
@@ -74,6 +82,11 @@ public class WeatherRetriever {
         weather.ifPresent(this::saveWeather);
 
         return weather;
+    }
+
+    List<Weather> retrieveStoredWeather(String location) {
+        logger.debug("Retrieving stored weather from database for: {}", location);
+        return repository.findByLocation(location);
     }
 
     private Optional<Weather> processRequest(UriComponentsBuilder builder) {
