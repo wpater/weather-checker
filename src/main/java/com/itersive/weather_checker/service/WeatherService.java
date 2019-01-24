@@ -66,8 +66,16 @@ public class WeatherService {
         this.locations.remove(location);
     }
 
+    public Set<String> getLocations() {
+        return locations;
+    }
+
     public void setDetection(String detection) {
         this.detection = detection;
+    }
+
+    public String getDetection() {
+        return detection;
     }
 
     private void autodetect() {

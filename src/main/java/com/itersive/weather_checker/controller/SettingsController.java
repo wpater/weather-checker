@@ -1,10 +1,13 @@
 package com.itersive.weather_checker.controller;
 
 import com.itersive.weather_checker.service.WeatherService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("settings")
@@ -29,5 +32,15 @@ public class SettingsController {
     @PostMapping("detect")
     public void setAutodetection(@RequestParam String auto) {
         weatherService.setDetection(auto);
+    }
+
+    @GetMapping("location")
+    public Set<String> getLocations() {
+       return weatherService.getLocations();
+    }
+
+    @GetMapping("detect")
+    public String getAutodetection() {
+        return weatherService.getDetection();
     }
 }
