@@ -76,12 +76,8 @@ public class WeatherRetriever {
                 .queryParam(lon, location.getCoordinates().getLng())
                 .queryParam(appId, apiId)
                 .queryParam(units, celsius);
-
-        Optional<Weather> weather = processRequest(builder);
-
-        weather.ifPresent(this::saveWeather);
-
-        return weather;
+        // Don't save weather here - this method is called only during autodetection (for now)
+        return processRequest(builder);
     }
 
     List<Weather> retrieveStoredWeather(String location) {

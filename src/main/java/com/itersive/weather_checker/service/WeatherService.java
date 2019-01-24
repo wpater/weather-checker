@@ -69,6 +69,7 @@ public class WeatherService {
 
     public void setDetection(String detection) {
         this.detection = detection;
+        autodetect();
     }
 
     public String getDetection() {
