@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  server:
+    image: weather_server
+    restart: always
+    ports:
+    - "8080:8080"
+    container_name: weather_server
+  client:
+    image: weather_client
+    restart: always
+    ports:
+    - "3000:80"
+    container_name: weather_client

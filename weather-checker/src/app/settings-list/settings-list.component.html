@@ -1,7 +1,7 @@
 <p>
   Already declared locations:
 </p>
-<ul *ngIf="locationsObservable | async as locations else empty">
+<ul *ngIf="locationsObservable | async as locations">
 
   <li *ngFor="let location of locations">
     <p> {{location | json}}</p>
@@ -10,6 +10,6 @@
 </ul>
 
 <p>Autodetect option:</p>
-<p *ngIf="autoObservable | async as auto else empty">
+<p *ngIf="autoObservable | async as auto">
   {{auto}}
 </p>
