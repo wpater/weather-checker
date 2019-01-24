@@ -1,0 +1,16 @@
+<p>
+  Previous weather for declared locations:
+</p>
+<ul *ngIf="locationsObservable | async as locations else empty">
+
+  <li *ngFor="let location of locations">
+    <ul> {{location[0].name}}
+      <li *ngFor="let weather of location">
+        <p> {{weather.temp}} - {{weather.date}}</p>
+      </li>
+    </ul>
+  </li>
+
+</ul>
+
+<ng-template #empty> No data </ng-template>

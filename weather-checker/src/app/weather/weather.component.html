@@ -1,0 +1,12 @@
+<p>
+  Weather for declared locations:
+</p>
+<ul *ngIf="weatherObservable | async as weathers else empty">
+
+  <li *ngFor="let weather of weathers">
+    <p> {{weather.name}} - temp: {{weather.temp}}</p>
+  </li>
+
+</ul>
+
+<ng-template #empty> No data </ng-template>
