@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+
+h1 {
+  color: #369;
+  font-size: 350%;
+}
+
+:host {
+  font-family: 'Roboto Condensed', sans-serif;
+}

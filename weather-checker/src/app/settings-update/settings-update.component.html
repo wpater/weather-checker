@@ -1,0 +1,33 @@
+<div class="container">
+<h1>Change settings</h1>
+  <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+  <div class="form-group">
+    <label for="addLocation">Add location </label>
+    <input type="text" class="form-control" name ="addLocation" id="addLocation" ngModel>
+  </div>
+  <div class="form-group">
+    <label for="delLocation">Delete location </label>
+    <input type="text" class="form-control" name ="delLocation" id="delLocation" ngModel>
+  </div>
+  <div class="form-group">
+    <label for="auto">Autodetect </label>
+    <input type="text" class="form-control" name ="auto" id="auto" placeholder="auto" ngModel>
+  </div>
+  <div class="form-group">
+    <button class="btn btn-primary">Submit changes</button>
+  </div>
+</form>
+
+</div>
+
+<!--<form (ngSubmit)="onSubmit(f)" #f="ngForm">-->
+  <!--<div class="form-group">-->
+    <!--<label for="addLocation">Add location </label>-->
+    <!--<input type="text" class="form-control" name ="addLocation" id="addLocation" ngModel>-->
+    <!--<label for="delLocation">Delete location </label>-->
+    <!--<input type="text" class="form-control" name ="delLocation" id="delLocation" ngModel>-->
+    <!--<label for="auto">Autodetect </label>-->
+    <!--<input type="text" class="form-control" name ="auto" id="auto" placeholder="auto" ngModel>-->
+    <!--<button type="submit" class="btn btn-primary">Submit changes</button>-->
+  <!--</div>-->
+<!--</form>-->

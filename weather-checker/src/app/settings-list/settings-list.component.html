@@ -1,0 +1,15 @@
+<p>
+  Already declared locations:
+</p>
+<ul *ngIf="locationsObservable | async as locations else empty">
+
+  <li *ngFor="let location of locations">
+    <p> {{location | json}}</p>
+  </li>
+
+</ul>
+
+<p>Autodetect option:</p>
+<p *ngIf="autoObservable | async as auto else empty">
+  {{auto}}
+</p>
