@@ -4,7 +4,6 @@ services:
   server:
     image: weather_server
     restart: always
-    ports:
     container_name: weatherserver
   client:
     image: weather_client
