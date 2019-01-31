@@ -1,5 +1,6 @@
 # Weather Checker
 Simple application for checking weather in few locations.
+Task for recruitment (01.2019). Finished.
 
 ## Configure
 
